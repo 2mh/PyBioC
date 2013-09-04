@@ -16,4 +16,7 @@ class BioCPassage:
             self.annotations = passage.annotations
             self.relations = passage.relations
 
+    def size(self):
+        return len(self.sentences)
+
     # TBD: Sentence parts missing

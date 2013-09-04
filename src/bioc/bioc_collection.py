@@ -1,2 +1,45 @@
-class BioCollection:
-	pass
+__all__ = ['BioCCollection']
+
+from bioc_meta import MetaInfons
+
+class BioCCollection(MetaInfons):
+
+    def __init__(self, collection=None):
+        self.source = ''
+        self.date = ''
+        self.key = ''
+        self.documents = list()
+
+        if collection is not None:
+            self.infons = collection.infons
+            self.source = collection.source
+            self.date = collection.date
+            self.key = collection.key
+            self.documents = collection.documents
+
+    def __str__(self):
+        s = 'source: ' + self.source + '\n'
+        s += 'date: ' + self.date + '\n'
+        s += 'key: ' + self.key + '\n'
+        s += str(self.infons) + '\n'
+        s += str(self.documents) + '\n'
+
+        return s
+       
+    def clear_documents(self):
+        self.documents = list()
+
+    def get_document(self, doc_idx):
+        return self.documents[doc_idx] 
+
+    def add_document(self, document):
+        self.documents.append(document)
+
+    def remove_document(self, document):
+       if type(document) is int:
+            self.dcouments.remove(self.documents[document])
+        else:
+            self.documents.remove(document) # TBC
+
+    def iterator(self):
+        pass # TBD: Iterate over documents
