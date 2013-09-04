@@ -1,12 +1,12 @@
 __all__ = ['BioCSentence']
 
 
-from bioc_meta import MetaAnnotations, MetaInfons, MetaOffset, \
-                      MetaRelations, MetaText
+from meta import _MetaAnnotations, _MetaInfons, _MetaOffset, \
+                      _MetaRelations, _MetaText
                       
 
-class BioCSentence(MetaAnnotations, MetaInfons, MetaOffset, 
-                   MetaRelations, MetaText):
+class BioCSentence(_MetaAnnotations, _MetaInfons, _MetaOffset, 
+                   _MetaRelations, _MetaText):
     
     def __init__(self, sentence=None):
 

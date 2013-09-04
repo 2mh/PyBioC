@@ -1,9 +1,10 @@
 __all__ = ['BioCPassage']
 
-from bioc_meta import MetaAnnotations, MetaInfons, MetaOffset, \
-                      MetaRelations, MetaText
+from meta import _MetaAnnotations, _MetaInfons, _MetaOffset, \
+                 _MetaRelations, _MetaText
 
-class BioCPassage:
+class BioCPassage(_MetaAnnotations, _MetaOffset, _MetaText,
+                  _MetaRelations, _MetaInfons):
 
     def __init__(self, passage=None):
         self.sentences = list()

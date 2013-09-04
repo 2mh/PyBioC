@@ -1,9 +1,9 @@
 __all__ = ['BioCRelation']
 
-from bioc_meta import MetaId, MetInfons
+from meta import _MetaId, _MetaInfons
 from bioc_node import BioCNode
 
-class BioCRelation(MetaId, MetaInfons):
+class BioCRelation(_MetaId, _MetaInfons):
 
     def __init__(self, relation=None):
         self.nodes = list()

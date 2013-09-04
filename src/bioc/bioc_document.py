@@ -1,8 +1,9 @@
 __all__ = ['BioCDocument']
 
-from bioc_meta import MetaId, MetaInfons, MetaRelations
+from compat import _Py2Next
+from meta import _MetaId, _MetaInfons, _MetaRelations
 
-class BioCDocument(MetaId, MetaInfons, MetaRelations):
+class BioCDocument(_MetaId, _MetaInfons, _MetaRelations):
 
     def __init__(self, document=None):
 
@@ -22,6 +23,12 @@ class BioCDocument(MetaId, MetaInfons, MetaRelations):
 
         return s
 
+    def __iter__(self):
+        self.next()
+
+    def next(self):
+        pass # TBD
+        
     def get_size(self):
         return self.passages.size() # As in Java BioC
 
@@ -36,6 +43,3 @@ class BioCDocument(MetaId, MetaInfons, MetaRelations):
             self.passages.remove(self.passages[passage])
         else:
             self.passages.remove(passage) # TBC
-
-    def iterator(self):
-        pass # TBD: To iterate over passages

@@ -1,8 +1,9 @@
 __all__ = ['BioCCollection']
 
-from bioc_meta import MetaInfons
+from meta import _MetaInfons
+from compat import _Py2Next
 
-class BioCCollection(MetaInfons):
+class BioCCollection(_Py2Next, _MetaInfons):
 
     def __init__(self, collection=None):
         self.source = ''
@@ -37,9 +38,9 @@ class BioCCollection(MetaInfons):
 
     def remove_document(self, document):
        if type(document) is int:
-            self.dcouments.remove(self.documents[document])
-        else:
-            self.documents.remove(document) # TBC
+           self.dcouments.remove(self.documents[document])
+       else:
+           self.documents.remove(document) # TBC
 
     def iterator(self):
         pass # TBD: Iterate over documents

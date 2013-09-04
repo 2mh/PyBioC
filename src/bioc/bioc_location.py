@@ -1,8 +1,8 @@
 __all__ = ['BioCLocation']
 
-from bioc_meta import MetaOffset
+from meta import _MetaOffset
 
-class BioCLocation(MetaOffset):
+class BioCLocation(_MetaOffset):
 
     def __init__(self, location=None):
         self.length = 0

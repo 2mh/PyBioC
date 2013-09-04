@@ -1,8 +1,8 @@
 __all__ = ['BioCAnnotation']
 
-from bioc_meta import MetaId, MetaInfons, MetaText
+from meta import _MetaId, _MetaInfons, _MetaText
 
-class BioCAnnotation(MetaId, MetaInfons, MetaText):
+class BioCAnnotation(_MetaId, _MetaInfons, _MetaText):
 
     def __init__(self, annotation=None):
         self.locations = list()

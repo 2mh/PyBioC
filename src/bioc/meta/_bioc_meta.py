@@ -1,9 +1,6 @@
-__all__ = [
-    'MetaAnnotations', 'MetaId', 'MetaInfons', 'MetaOffset', 'MetaRelations',
-    'MetaText'
-    ]
+__all__ = []
 
-class MetaAnnotations:
+class _MetaAnnotations:
     annotations = list()
 
     def annotation_iterator(self):
@@ -21,7 +18,7 @@ class MetaAnnotations:
         else:
             self.annotations.remove(annotation) # TBC
 
-class MetaInfons:
+class _MetaInfons:
     infons = dict()
 
     def put_infon(self, key, val):
@@ -33,10 +30,10 @@ class MetaInfons:
     def clear_infons(self):
         self.infons = dict()
 
-class MetaOffset:
+class _MetaOffset:
     offset = -1
 
-class MetaRelations:
+class _MetaRelations:
     relations = list()
 
     def relation_iterator(self):
@@ -54,8 +51,8 @@ class MetaRelations:
         else:
             self.relations.remove(relation) # TBC
 
-class MetaText:
+class _MetaText:
     text = ''
 
-class MetaId:
+class _MetaId:
     id = ''
