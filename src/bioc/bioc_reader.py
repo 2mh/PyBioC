@@ -6,13 +6,18 @@ from bioc_passage import BioCPassage
 from bioc_sentence import BioCSentence
 
 class BioCReader:
-    def __init__(self):
+
+    def __init__(self, file_object=None, file_name=None)
         self.collection = None
         self.document = None
         self.passage = None
         self.sentence = None
-        self.fh = None # File Handler
-        int state = -1
+        self.xml_object = None
+        int state = 0
         is_sentence_level = False
         is_document_level = False
         is_passage_level = False
+
+   # XXX: TBD
+   def close():
+       pass 
