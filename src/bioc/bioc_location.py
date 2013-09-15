@@ -5,6 +5,8 @@ from meta import _MetaOffset
 class BioCLocation(_MetaOffset):
 
     def __init__(self, location=None):
+        
+        self.offset = -1
         self.length = 0
 
         if location is not None:

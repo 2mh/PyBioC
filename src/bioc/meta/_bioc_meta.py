@@ -10,7 +10,7 @@ class _MetaAnnotations:
         self.annotations = list()
 
     def add_annotation(self, annotation):
-	self.annotations.append(annotation)
+        self.annotations.append(annotation)
 
     def remove_annotation(self, annotation): # Can be int or obj
         if type(annotation) is int:
@@ -22,10 +22,10 @@ class _MetaInfons:
     infons = dict()
 
     def put_infon(self, key, val):
-        infons[key] = val 
+        self.infons[key] = val 
 
     def remove_infon(self, key):
-        del(infons[key]) 
+        del(self.infons[key]) 
 
     def clear_infons(self):
         self.infons = dict()

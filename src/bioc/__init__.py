@@ -7,7 +7,7 @@ __version__ = '0.1'
 __all__ = [
     'BioCAnnotation', 'BioCCollection', 'BioCDocument',
     'BioCLocation', 'BioCNode', 'BioCPassage', 'BioCRelation',
-    'BioCSentence', 'BioCReader'
+    'BioCSentence', 'BioCReader', 'BioCWriter'
     ]
 
 __author__ = 'Hernani Marques (h2m@access.uzh.ch)'
@@ -21,3 +21,4 @@ from bioc_passage import BioCPassage
 from bioc_relation import BioCRelation
 from bioc_sentence import BioCSentence
 from bioc_reader import BioCReader
+from bioc_writer import BioCWriter

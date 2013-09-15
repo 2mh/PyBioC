@@ -3,6 +3,7 @@ __all__ = ['BioCNode']
 class BioCNode:
 
     def __init__(self, node=None, refid=None, role=None):
+        
         self.refid = ''
         self.role = ''
 

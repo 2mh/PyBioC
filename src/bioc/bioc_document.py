@@ -8,6 +8,9 @@ class BioCDocument(_MetaId, _MetaInfons, _MetaRelations, _MetaIter,
 
     def __init__(self, document=None):
 
+        self.id = ''
+        self.infons = dict()
+        self.relations = list()
         self.passages = list()
 
         if document is not None:
@@ -18,9 +21,9 @@ class BioCDocument(_MetaId, _MetaInfons, _MetaRelations, _MetaIter,
 
     def __str__(self):
         s = 'id: ' + self.id + '\n'
-        s += 'infon: ' + self.infons + '\n'
+        s += 'infon: ' + str(self.infons) + '\n'
         s += str(self.passages) + '\n'
-        s += str(self.relations) + '\n'
+        s += 'relation: ' + str(self.relations) + '\n'
 
         return s
 
@@ -34,7 +37,7 @@ class BioCDocument(_MetaId, _MetaInfons, _MetaRelations, _MetaIter,
         self.passages = list()
 
     def add_passage(self, passage):
-        self.annotations.append(passage)
+        self.passages.append(passage)
 
     def remove_passage(self, passage):
         if type(passage) is int:

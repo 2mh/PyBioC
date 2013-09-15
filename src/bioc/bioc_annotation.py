@@ -5,7 +5,11 @@ from meta import _MetaId, _MetaInfons, _MetaText
 class BioCAnnotation(_MetaId, _MetaInfons, _MetaText):
 
     def __init__(self, annotation=None):
+        
+        self.id = ''
+        self.infons = dict()
         self.locations = list()
+        self.text = ''
 
         if annotation is not None:
             self.id = annotation.id
@@ -13,7 +17,7 @@ class BioCAnnotation(_MetaId, _MetaInfons, _MetaText):
             self.locations = annotation.locations
             self.text = self.text
 
-    def __str__():
+    def __str__(self):
         s = 'id: ' + self.id + '\n'
         s += str(self.infons) + '\n'
         s += 'locations: ' + str(self.locations) + '\n'
@@ -21,8 +25,8 @@ class BioCAnnotation(_MetaId, _MetaInfons, _MetaText):
 
         return s
 
-    def clear_locations():
+    def clear_locations(self):
         self.locations = list()
 
-    def add_location(location):
+    def add_location(self, location):
         self.locations.append(location)

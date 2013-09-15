@@ -7,7 +7,10 @@ from bioc_node import BioCNode
 class BioCRelation(_MetaId, _MetaInfons, _Py2Next, _MetaIter):
 
     def __init__(self, relation=None):
+        
+        self.id = ''
         self.nodes = list()
+        self.infons = dict()
 
         if relation is not None:
             self.id = relation.id

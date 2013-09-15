@@ -6,6 +6,8 @@ from compat import _Py2Next
 class BioCCollection(_Py2Next, _MetaInfons, _MetaIter):
 
     def __init__(self, collection=None):
+        
+        self.infons = dict()
         self.source = ''
         self.date = ''
         self.key = ''

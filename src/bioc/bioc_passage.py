@@ -7,7 +7,13 @@ class BioCPassage(_MetaAnnotations, _MetaOffset, _MetaText,
                   _MetaRelations, _MetaInfons):
 
     def __init__(self, passage=None):
+        
+        self.offset = -1
+        self.text = ''
+        self.infons = dict()
         self.sentences = list()
+        self.annotations = list()
+        self.relations = list()
 
         if passage is not None:
             self.offset = passage.offset
