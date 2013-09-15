@@ -7,21 +7,21 @@ class BioCWriter:
     
     def __init__(self, filename, collection=None):
         
-        self.root = E('collection', # 1
-                        E('source'), # 1
-                        E('date'), # 1
-                        E('key'), # 1
-                        E('document', # >= 1
-                            E('id'), # 1
-                            E('passage', # >= 1
-                                E('offset') # 1
+        self.root_tree = E('collection', # 1
+                            E('source'), # 1
+                            E('date'), # 1
+                            E('key'), # 1
+                            E('document', # >= 1
+                                E('id'), # 1
+                                E('passage', # >= 1
+                                    E('offset') # 1
+                                )
                             )
                         )
-                    )
-        self.annotation = E('annotation', id='',
+        self.annot_tree = E('annotation', id='',
                             E('text') # 1
                         )
-        self.sentence = E('sentence',
+        self.sent_tree = E('sentence',
                             E('offset') # 1
                         )
         self.filename = filename
