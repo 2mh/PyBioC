@@ -94,7 +94,6 @@ class BioCReader:
                 self.annotation = BioCAnnotation() 
                 self.annotation.id = self._get_id(elem)
                 self._read_annotation()
-                #print elem.tag
                 self.passage.add_annotation(self.annotation)
             elif elem.tag == 'relation':
                 self.relation = BioCRelation()
@@ -142,6 +141,7 @@ class BioCReader:
                 node = BioCNode()
                 node.refid = elem.attrib['refid'] 
                 node.role = elem.attrib['role']
+                self.relation.add_node(node)
             else:
                 break
 
@@ -158,10 +158,8 @@ class BioCReader:
                 self.annotation.add_location(location)
             elif elem.tag == 'text':
                 self.annotation.text = elem.text
-            else:
-                #print elem.tag, elem.attrib['id']
                 break
-
+                
     def _get_infon_key(self, elem):
         return elem.attrib['key']
 

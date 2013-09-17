@@ -32,4 +32,4 @@ class BioCRelation(_MetaId, _MetaInfons, _Py2Next, _MetaIter):
         if (refid is not None) and (role is not None):
             self.add_node(refid=refid, role=role)
         else: # Only consider optional args if both set
-            self.nodes.append[node]
+            self.nodes.append(node)

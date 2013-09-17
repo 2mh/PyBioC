@@ -70,6 +70,8 @@ class BioCWriter:
         # document+
         nav = self.root_tree.find('document')
         for document in self.collection.documents:
+            nav_doc = nav
+            
             # id
             nav = nav.find('id')
             nav.text = document.id
@@ -85,6 +87,7 @@ class BioCWriter:
             # passage+
             for passage in document.passages:
                 nav = nav.getnext() # Go to <passage>
+                nav_passage = nav
                 
                 # infon*
                 for infon_key, infon_val in passage.infons.items():
@@ -133,9 +136,25 @@ class BioCWriter:
                         nav.append(text_elem)
                 
                 # relation*
-                # nav = nav.find('relation')
-                # print nav.tag
-                print("Length relations: " + str(len(passage.relations)))
+                for relation in passage.relations:
+                    nav_passage.append(E('relation'))
+                    nav = nav_passage.getchildren()[-1]
+                    nav.attrib['id'] = relation.id
+                    
+                    # infon*
+                    for infon_key, infon_val in relation.infons.items():
+                        infon_elem = E('infon')
+                        infon_elem.attrib['key'] = infon_key
+                        infon_elem.text = infon_val
+                        nav.insert(0, infon_elem)
+                        
+                    # node*
+                    for node in relation.nodes:
+                        nav.append(E('node'))
+                        nav = nav.getchildren()[-1]
+                        nav.attrib['refid'] = node.refid
+                        nav.attrib['role'] = node.role
+                    
                     
             # relation*
             pass
