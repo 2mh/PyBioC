@@ -68,8 +68,79 @@ class BioCWriter:
                                 infon_elem)
                                 
         # document+
-        pass
-        
+        nav = self.root_tree.find('document')
+        for document in self.collection.documents:
+            # id
+            nav = nav.find('id')
+            nav.text = document.id
+
+            # infon*
+            for infon_key, infon_val in document.infons.items():
+                infon_elem = E('infon')
+                infon_elem.attrib['key'] = infon_key
+                infon_elem.text = infon_val
+                nav.addnext(infon_elem)
+                nav = nav.getnext() # Go to <infon>
+            
+            # passage+
+            for passage in document.passages:
+                nav = nav.getnext() # Go to <passage>
+                
+                # infon*
+                for infon_key, infon_val in passage.infons.items():
+                    infon_elem = E('infon')
+                    infon_elem.attrib['key'] = infon_key
+                    infon_elem.text = infon_val
+                    nav.insert(0, infon_elem)
+                    
+                # offset
+                nav = nav.find('offset')
+                nav.text = passage.offset
+                
+                # sentence | text?, annotation*
+                if passage.has_sentence():
+                    # TBD
+                    pass
+                else:
+                    # text?, annotation*
+                    nav.addnext(E('text'))
+                    nav = nav.getnext() # Go to <text>
+                    nav.text = passage.text
+                    nav.addnext(E('annotation'))
+                    nav = nav.getnext() # Go to <annotation>
+                    
+                    for annotation in passage.annotations:
+                        nav.attrib['id'] = annotation.id
+                        
+                        # infon*
+                        for infon_key, infon_val \
+                                        in annotation.infons.items():
+                            infon_elem = E('infon')
+                            infon_elem.attrib['key'] = infon_key
+                            infon_elem.text = infon_val
+                            nav.insert(0, infon_elem)
+                        # location*
+                        for location in annotation.locations:
+                            location_elem = E('location')
+                            location_elem.attrib['offset'] = \
+                                                        location.offset
+                            location_elem.attrib['length'] = \
+                                                        location.length
+                            nav.append(location_elem)
+                        # text
+                        text_elem = E('text')
+                        text_elem.text = annotation.text
+                        nav.append(text_elem)
+                
+                # relation*
+                # nav = nav.find('relation')
+                # print nav.tag
+                print("Length relations: " + str(len(passage.relations)))
+                    
+            # relation*
+            pass
+            
+                
    
     '''
     def _build_collection_infon(self, tree):

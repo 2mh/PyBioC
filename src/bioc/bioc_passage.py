@@ -26,4 +26,8 @@ class BioCPassage(_MetaAnnotations, _MetaOffset, _MetaText,
     def size(self):
         return len(self.sentences)
 
+    def has_sentence(self):
+        if len(self.sentences) > 0:
+            return True
+
     # TBD: Sentence parts missing
