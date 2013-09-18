@@ -1,5 +1,7 @@
 __all__ = ['BioCReader']
 
+import StringIO
+
 from lxml import etree
 
 from bioc_annotation import BioCAnnotation
@@ -12,13 +14,33 @@ from bioc_node import BioCNode
 from bioc_relation import BioCRelation
 
 class BioCReader:
+    """
+    This class can be used to store BioC XML files in PyBioC objects, 
+    for further manipulation.
+    """
 
-    def __init__(self, source): # For now source is string
+    def __init__(self, source, dtd_valid_file=None):
+        """
+        source:             File path to a BioC XML input document.
+        dtd_valid_file:     File path to a BioC.dtd file. Using this
+                            optional argument ensures DTD validation.
+        """
         
+        self.source = source
         self.collection = BioCCollection()
         self.xml_tree = etree.parse(source)
-
+        
+        if dtd_valid_file is not None:
+            dtd = etree.DTD(dtd_valid_file)
+            if dtd.validate(self.xml_tree) is False:
+                raise(Exception(dtd.error_log.filter_from_errors()[0]))
+                
     def read(self):
+        """
+        Invoke this method in order to read in the file provided by
+        the source class variable. Only after this method has been
+        called the BioCReader object gets populated.
+        """
         self._read_collection()
             
     def _read_collection(self):
@@ -121,6 +143,3 @@ class BioCReader:
  
     def _get_infon_key(self, elem):
         return elem.attrib['key']
-
-    def _get_id(self, elem):
-        return elem.attrib['id']

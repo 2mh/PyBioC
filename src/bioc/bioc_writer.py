@@ -12,6 +12,7 @@ class BioCWriter:
         self.collection = None
         self.doctype = '''<?xml version='1.0' encoding='UTF-8'?>'''
         self.doctype += '''<!DOCTYPE collection SYSTEM 'BioC.dtd'>'''
+        self.filename = filename
         
         if collection is not None:
             self.collection = collection
@@ -20,13 +21,36 @@ class BioCWriter:
             self.filename = filename
         
     def __str__(self):
-        
+        """ A BioCWriter object can be printed as string.
+        """
+        self._check_for_data()
+            
         self.build()
         s = tostring(self.root_tree, 
                     pretty_print=True, 
                     doctype=self.doctype)
                     
         return s
+    
+    def _check_for_data(self):
+        if self.collection is None:
+            raise(Exception('No data available.'))
+    
+    def write(self, filename=None):
+        """ Use this method to write the data in the PyBioC objects
+            to disk.
+            
+            filename:   Output file path (optional argument; filename
+                        provided by __init__ used otherwise.)
+        """
+        if filename is not None:
+            self.filename = filename
+        
+        if self.filename is None:
+            raise(Exception('No output file path provided.'))
+            
+        f = open(self.filename, 'w')
+        f.write(self.__str__())
         
     def build(self):
         self._build_collection()
