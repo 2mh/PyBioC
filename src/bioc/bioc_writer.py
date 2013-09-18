@@ -7,27 +7,11 @@ class BioCWriter:
     
     def __init__(self, filename=None, collection=None):
         
-        self.root_tree = E('collection', # 1
-                            E('source'), # 1
-                            E('date'), # 1
-                            E('key'), # 1
-                            E('document', # >= 1
-                                E('id'), # 1
-                                E('passage', # >= 1
-                                    E('offset') # 1
-                                )
-                            )
-                        )
-        self.annot_tree = E('annotation',
-                            E('text') # 1
-                        )
-        self.sent_tree = E('sentence',
-                            E('offset') # 1
-                        )
+        self.root_tree = None
                         
         self.collection = None
         self.doctype = '''<?xml version='1.0' encoding='UTF-8'?>'''
-        self.doctype += '''<!DOCTYPE collection SYSTEM "BioC.dtd">'''
+        self.doctype += '''<!DOCTYPE collection SYSTEM 'BioC.dtd'>'''
         
         if collection is not None:
             self.collection = collection
@@ -46,164 +30,113 @@ class BioCWriter:
         
     def build(self):
         self._build_collection()
-        #self._build_collection_infon(self.root_tree)
-        #self._build_collection_document()
         
     def _build_collection(self):
-        
-        # source, date, key
-        nav = self.root_tree.find('source')
-        nav.text = self.collection.source
-        nav = self.root_tree.find('date')
-        nav.text = self.collection.date
-        nav = self.root_tree.find('key')
-        nav.text = self.collection.key
-        
+        self.root_tree = E('collection', 
+                            E('source'), E('date'), E('key'))
+        self.root_tree.xpath('source')[0].text = self.collection.source
+        self.root_tree.xpath('date')[0].text = self.collection.date
+        self.root_tree.xpath('key')[0].text = self.collection.key         
+        collection_elem = self.root_tree.xpath('/collection')[0]
         # infon*
-        self._build_infons(nav, self.collection.infons, pos='next')
-                                
+        self._build_infons(self.collection.infons, collection_elem)
         # document+
-        nav = self.root_tree.find('document')
-        for document in self.collection.documents:
-            nav_doc = nav
-            
-            # id
-            nav = nav.find('id')
-            nav.text = document.id
-
-            # infon*
-            self._build_infons(nav.getparent(), document.infons)
-            
-            # passage+
-            for passage in document.passages:
-                nav = nav.getnext() # Go to <passage>
-                nav_passage = nav
-                
-                # infon*
-                self._build_infons(nav, passage.infons)
-                
-                # offset
-                nav = nav.find('offset')
-                nav.text = passage.offset
-                
-                # sentence | text?, annotation*
-                if passage.has_sentence():
-                    # sentence
-                    for sentence in passage.sentences:
-                        nav.addnext(E('sentence'))
-                        nav = nav.getnext() # Go to <sentence>
-                        nav_sentence = nav
-                        
-                        # infon*
-                        self._build_infons(nav, sentence.infons)
-
-                        # offset
-                        nav.append(E('offset'))
-                        nav = nav.find('offset')
-                        nav.text = sentence.text
-                        # text?
-                        if len(sentence.text) > 0:
-                            nav.addnext(E('text'))
-                            nav = nav.getnext()
-                            nav.text = sentence.text
-                        # annotation*
-                        for annotation in sentence.annotations:
-                            nav.addnext(E('annotation'))
-                            nav = nav.getnext()
-                            # infon*
-                            
-                            self._build_infons(nav, annotation.infons)
-
-                            # location
-                            self._build_locations(nav, 
-                                            annotation.locations)
-                            
-                            # text
-                            nav.append(E('text'))
-                            nav = nav.find('text')
-                            nav.text = annotation.text
-                        # relation*
-                        for relation in sentence.relations:
-                            nav_sentence.append(E('relation'))
-                            nav = nav_sentence.getchildren()[-1]
-                            nav.attrib['id'] = relation.id
-                    
-                            # infon*
-                            self._build_infons(nav, relation.infons)
-                        
-                            # node*
-                            self._build_nodes(nav, relation.nodes)
-                else:
-                    # text?, annotation*
-                    nav.addnext(E('text'))
-                    nav = nav.getnext() # Go to <text>
-                    nav.text = passage.text
-                    nav.addnext(E('annotation'))
-                    nav = nav.getnext() # Go to <annotation>
-                    
-                    for annotation in passage.annotations:
-                        nav.attrib['id'] = annotation.id
-                        
-                        # infon*
-                        self._build_infons(nav, annotation.infons)
-
-                        # location*
-                        self._build_locations(nav, 
-                                            annotation.locations)
-                            
-                        # text
-                        text_elem = E('text')
-                        text_elem.text = annotation.text
-                        nav.append(text_elem)
-                
-                # relation*
-                for relation in passage.relations:
-                    nav_passage.append(E('relation'))
-                    nav = nav_passage.getchildren()[-1]
-                    nav.attrib['id'] = relation.id
-                    
-                    # infon*
-                    self._build_infons(nav, relation.infons)
-                        
-                    # node*
-                    self._build_nodes(nav, relation.nodes)
-                    
-                    
-            # relation*
-            '''
-            nav = nav_doc
-            print len(document.relations)
-            for relation in document.relations:
-                print relation
-            '''
-   
-   
-    def _build_infons(self, nav, infons, pos=None):
+        self._build_documents(self.collection.documents, 
+                                collection_elem)
         
-        for infon_key, infon_val in infons.items():
-            infon_elem = E('infon')
+    def _build_infons(self, infons_dict, infons_parent_elem):
+        for infon_key, infon_val in infons_dict.items():
+            infons_parent_elem.append(E('infon'))
+            infon_elem = infons_parent_elem.xpath('infon')[-1]
+            
             infon_elem.attrib['key'] = infon_key
             infon_elem.text = infon_val
-
-            if pos == 'next':
-                nav.addnext(infon_elem)
+            
+    def _build_documents(self, documents_list, collection_parent_elem):
+        for document in documents_list:
+            collection_parent_elem.append(E('document', E('id')))
+            document_elem = collection_parent_elem.xpath('document')[-1]
+            # id
+            id_elem = document_elem.xpath('id')[0]
+            id_elem.text = document.id
+            # infon*
+            self._build_infons(document.infons, document_elem)
+            # passage+
+            self._build_passages(document.passages, document_elem)
+            # relation*
+            self._build_relations(document.relations, document_elem)
+            
+    def _build_passages(self, passages_list, document_parent_elem):
+        for passage in passages_list:
+            document_parent_elem.append(E('passage'))
+            passage_elem = document_parent_elem.xpath('passage')[-1]
+            # infon*
+            self._build_infons(passage.infons, passage_elem)
+            # offset
+            passage_elem.append(E('offset'))
+            passage_elem.xpath('offset')[0].text = passage.offset
+            if passage.has_sentences():
+                # sentence*
+                self._build_sentences(passage.sentences, passage_elem)
             else:
-                nav.append(infon_elem)
-   
-            
-    def _build_nodes(self, nav, nodes):
+                # text?, annotation*
+                passage_elem.append(E('text'))
+                passage_elem.xpath('text')[0].text = passage.text
+                self._build_annotations(passage.annotations, 
+                                        passage_elem)
+            # relation*
+            self._build_relations(passage.relations, passage_elem)
         
-        for node in nodes:
-            nav.append(E('node'))
-            nav = nav.getchildren()[-1]
-            nav.attrib['refid'] = node.refid
-            nav.attrib['role'] = node.role
+    def _build_relations(self, relations_list, relations_parent_elem):
+        for relation in relations_list:
+            relations_parent_elem.append(E('relation'))
+            relation_elem = relations_parent_elem.xpath('relation')[-1]
+            # infon*
+            self._build_infons(relation.infons, relation_elem)
+            # node*
+            for node in relation.nodes:
+                relation_elem.append(E('node'))
+                node_elem = relation_elem.xpath('node')[-1]
+                node_elem.attrib['refid'] = node.refid
+                node_elem.attrib['role'] = node.role
         
-            
-    def _build_locations(self, nav, locations):
-        
-        for location in locations:
-            location_elem = E('location')
-            location_elem.attrib['offset'] = location.offset
-            location_elem.attrib['length'] = location.length
-            nav.append(location_elem)
+    def _build_annotations(self, annotations_list, 
+                            annotations_parent_elem):
+        for annotation in annotations_list:
+            annotations_parent_elem.append(E('annotation'))
+            annotation_elem = \
+                annotations_parent_elem.xpath('annotation')[-1]
+            # infon*
+            self._build_infons(annotation.infons, annotation_elem)
+            # location*
+            for location in annotation.locations:
+                annotation_elem.append(E('location'))
+                location_elem = annotation_elem.xpath('location')[-1]
+                location_elem.attrib['offset'] = location.offset
+                location_elem.attrib['length'] = location.length
+            # text
+            annotation_elem.append(E('text'))
+            text_elem = annotation_elem.xpath('text')[0]
+            text_elem.text = annotation.text
+            # id
+            annotation_elem.attrib['id'] = annotation.id
+
+    def _build_sentences(self, sentences_list, passage_parent_elem):
+        for sentence in sentences_list:
+            passage_parent_elem.append(E('sentence'))
+            sentence_elem = passage_parent_elem.xpath('sentence')[-1]
+            # infon*
+            self._build_infons(sentence.infons, sentence_elem)
+            # offset
+            sentence_elem.append(E('offset'))
+            offset_elem = sentence_elem.xpath('offset')[0]
+            offset_elem.text = sentence.offset
+            # text?
+            if len(sentence.text) > 0:
+                sentence_elem.append(E('text'))
+                text_elem = sentence_elem.xpath('text')[0]
+                text_elem.text = sentence.text
+            # annotation*
+            self._build_annotations(sentence.annotations, sentence_elem)
+            # relation*
+            self._build_relations(sentence.relations, sentence_elem)

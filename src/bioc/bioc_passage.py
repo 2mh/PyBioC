@@ -26,7 +26,7 @@ class BioCPassage(_MetaAnnotations, _MetaOffset, _MetaText,
     def size(self):
         return len(self.sentences)
 
-    def has_sentence(self):
+    def has_sentences(self):
         if len(self.sentences) > 0:
             return True
 
