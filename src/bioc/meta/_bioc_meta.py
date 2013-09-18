@@ -31,7 +31,7 @@ class _MetaInfons:
         self.infons = dict()
 
 class _MetaOffset:
-    offset = -1
+    offset = '-1'
 
 class _MetaRelations:
     relations = list()

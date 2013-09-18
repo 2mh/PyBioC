@@ -8,7 +8,7 @@ class BioCPassage(_MetaAnnotations, _MetaOffset, _MetaText,
 
     def __init__(self, passage=None):
         
-        self.offset = -1
+        self.offset = '-1'
         self.text = ''
         self.infons = dict()
         self.sentences = list()

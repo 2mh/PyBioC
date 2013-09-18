@@ -9,6 +9,12 @@ class BioCSentence(_MetaAnnotations, _MetaInfons, _MetaOffset,
                    _MetaRelations, _MetaText):
     
     def __init__(self, sentence=None):
+        
+        self.offset = '-1'
+        self.text = ''
+        self.infons = dict()
+        self.annotations = list()
+        self.relations = list()
 
         if sentence is not None:
             self.offset = sentence.offset

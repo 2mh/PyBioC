@@ -170,10 +170,12 @@ class BioCWriter:
                     
                     
             # relation*
+            '''
             nav = nav_doc
             print len(document.relations)
             for relation in document.relations:
                 print relation
+            '''
    
    
     def _build_infons(self, nav, infons, pos=None):
