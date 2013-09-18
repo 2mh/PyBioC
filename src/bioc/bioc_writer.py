@@ -72,7 +72,7 @@ class BioCWriter:
             nav.text = document.id
 
             # infon*
-            self._build_infons(nav, document.infons)
+            self._build_infons(nav.getparent(), document.infons)
             
             # passage+
             for passage in document.passages:
