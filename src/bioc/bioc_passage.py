@@ -30,4 +30,17 @@ class BioCPassage(_MetaAnnotations, _MetaOffset, _MetaText,
         if len(self.sentences) > 0:
             return True
 
-    # TBD: Sentence parts missing
+    def add_sentence(self, sentence):
+        self.sentences.append(sentence)
+
+    def sentences_iterator(self):
+        return self.sentences.iterator() # TBD
+
+    def clear_sentences(self):
+        self.relations = list()
+
+    def remove_sentence(self, sentence): # int or obj
+        if type(sentence) is int:
+            self.sentences.remove(self.sentences[sentence])
+        else:
+            self.sentences.remove(sentence)

@@ -60,12 +60,7 @@ class BioCWriter:
         nav.text = self.collection.key
         
         # infon*
-        for infon_key, infon_val in self.collection.infons.items():
-            infon_elem = E('infon')
-            infon_elem.attrib['key'] = infon_key
-            infon_elem.text = infon_val
-            self.root_tree.insert(self.root_tree.index(nav) + 1, 
-                                infon_elem)
+        self._build_infons(nav, self.collection.infons, pos='next')
                                 
         # document+
         nav = self.root_tree.find('document')
@@ -77,12 +72,7 @@ class BioCWriter:
             nav.text = document.id
 
             # infon*
-            for infon_key, infon_val in document.infons.items():
-                infon_elem = E('infon')
-                infon_elem.attrib['key'] = infon_key
-                infon_elem.text = infon_val
-                nav.addnext(infon_elem)
-                nav = nav.getnext() # Go to <infon>
+            self._build_infons(nav, document.infons)
             
             # passage+
             for passage in document.passages:
@@ -90,20 +80,59 @@ class BioCWriter:
                 nav_passage = nav
                 
                 # infon*
-                for infon_key, infon_val in passage.infons.items():
-                    infon_elem = E('infon')
-                    infon_elem.attrib['key'] = infon_key
-                    infon_elem.text = infon_val
-                    nav.insert(0, infon_elem)
-                    
+                self._build_infons(nav, passage.infons)
+                
                 # offset
                 nav = nav.find('offset')
                 nav.text = passage.offset
                 
                 # sentence | text?, annotation*
                 if passage.has_sentence():
-                    # TBD
-                    pass
+                    # sentence
+                    for sentence in passage.sentences:
+                        nav.addnext(E('sentence'))
+                        nav = nav.getnext() # Go to <sentence>
+                        nav_sentence = nav
+                        
+                        # infon*
+                        self._build_infons(nav, sentence.infons)
+
+                        # offset
+                        nav.append(E('offset'))
+                        nav = nav.find('offset')
+                        nav.text = sentence.text
+                        # text?
+                        if len(sentence.text) > 0:
+                            nav.addnext(E('text'))
+                            nav = nav.getnext()
+                            nav.text = sentence.text
+                        # annotation*
+                        for annotation in sentence.annotations:
+                            nav.addnext(E('annotation'))
+                            nav = nav.getnext()
+                            # infon*
+                            
+                            self._build_infons(nav, annotation.infons)
+
+                            # location
+                            self._build_locations(nav, 
+                                            annotation.locations)
+                            
+                            # text
+                            nav.append(E('text'))
+                            nav = nav.find('text')
+                            nav.text = annotation.text
+                        # relation*
+                        for relation in sentence.relations:
+                            nav_sentence.append(E('relation'))
+                            nav = nav_sentence.getchildren()[-1]
+                            nav.attrib['id'] = relation.id
+                    
+                            # infon*
+                            self._build_infons(nav, relation.infons)
+                        
+                            # node*
+                            self._build_nodes(nav, relation.nodes)
                 else:
                     # text?, annotation*
                     nav.addnext(E('text'))
@@ -116,20 +145,12 @@ class BioCWriter:
                         nav.attrib['id'] = annotation.id
                         
                         # infon*
-                        for infon_key, infon_val \
-                                        in annotation.infons.items():
-                            infon_elem = E('infon')
-                            infon_elem.attrib['key'] = infon_key
-                            infon_elem.text = infon_val
-                            nav.insert(0, infon_elem)
+                        self._build_infons(nav, annotation.infons)
+
                         # location*
-                        for location in annotation.locations:
-                            location_elem = E('location')
-                            location_elem.attrib['offset'] = \
-                                                        location.offset
-                            location_elem.attrib['length'] = \
-                                                        location.length
-                            nav.append(location_elem)
+                        self._build_locations(nav, 
+                                            annotation.locations)
+                            
                         # text
                         text_elem = E('text')
                         text_elem.text = annotation.text
@@ -142,69 +163,45 @@ class BioCWriter:
                     nav.attrib['id'] = relation.id
                     
                     # infon*
-                    for infon_key, infon_val in relation.infons.items():
-                        infon_elem = E('infon')
-                        infon_elem.attrib['key'] = infon_key
-                        infon_elem.text = infon_val
-                        nav.insert(0, infon_elem)
+                    self._build_infons(nav, relation.infons)
                         
                     # node*
-                    for node in relation.nodes:
-                        nav.append(E('node'))
-                        nav = nav.getchildren()[-1]
-                        nav.attrib['refid'] = node.refid
-                        nav.attrib['role'] = node.role
+                    self._build_nodes(nav, relation.nodes)
                     
                     
             # relation*
-            pass
-            
-                
+            nav = nav_doc
+            print len(document.relations)
+            for relation in document.relations:
+                print relation
    
-    '''
-    def _build_collection_infon(self, tree):
-        pass
-                
-    def _build_collection_document(self):
-        pass
+   
+    def _build_infons(self, nav, infons, pos=None):
         
-    def _build_infon(self):
-        pass
+        for infon_key, infon_val in infons.items():
+            infon_elem = E('infon')
+            infon_elem.attrib['key'] = infon_key
+            infon_elem.text = infon_val
+
+            if pos == 'next':
+                nav.addnext(infon_elem)
+            else:
+                nav.append(infon_elem)
+   
+            
+    def _build_nodes(self, nav, nodes):
         
-    def _build_document(self):
-        pass
+        for node in nodes:
+            nav.append(E('node'))
+            nav = nav.getchildren()[-1]
+            nav.attrib['refid'] = node.refid
+            nav.attrib['role'] = node.role
         
-    def _build_passage(self):
-        pass
-    
-    def _build_relation(self):
-        pass
+            
+    def _build_locations(self, nav, locations):
         
-    def _build_offset(self):
-        pass
-        
-    def _build_relation(self):
-        pass
-        
-    def _build_text(self):
-        pass
-        
-    def _build_sentence(self):
-        pass
-    
-    def _build_id(self):
-        pass
-        
-    def _build_annotation(self):
-        pass
-        
-    def _build_annotation(self):
-        pass
-        
-    def _build_node(self):
-        pass
-    
-    def write(self):
-        #f = open(self.filename, 'w')
-        pass
-    '''
+        for location in locations:
+            location_elem = E('location')
+            location_elem.attrib['offset'] = location.offset
+            location_elem.attrib['length'] = location.length
+            nav.append(location_elem)

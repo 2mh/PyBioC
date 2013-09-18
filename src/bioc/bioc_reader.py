@@ -76,6 +76,9 @@ class BioCReader:
         self.passage = BioCPassage()
 
         for elem in self.xml_iter:
+            
+            print elem.tag
+
             # 0 or more <infon> possible
             if elem.tag == 'infon':
                 infon_key = self._get_infon_key(elem)
@@ -95,7 +98,8 @@ class BioCReader:
                 self.annotation.id = self._get_id(elem)
                 self._read_annotation()
                 self.passage.add_annotation(self.annotation)
-            elif elem.tag == 'relation':
+            elif elem.tag == 'relation' \
+                            and elem.getparent().tag == 'passage':
                 self.relation = BioCRelation()
                 self.relation.id = self._get_id(elem)
                 self._read_relation()
@@ -132,7 +136,7 @@ class BioCReader:
                 break
 
     def _read_relation(self):
-                
+        
         for elem in self.xml_iter:
             if elem.tag == 'infon':
                 infon_key = self._get_infon_key(elem)
