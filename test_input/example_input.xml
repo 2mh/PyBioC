@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE collection SYSTEM "BioC.dtd">
+<collection>
+    <source>PUBMED</source>
+    <date>20130422</date>
+    <key>ctdBCIVLearningDataSet.key</key>
+    <document>
+        <id>10617681</id>
+        <passage>
+            <infon key="type">title</infon>
+            <offset>0</offset>
+            <text>Possible role of valvular serotonin 5-HT(2B) receptors in the cardiopathy associated with fenfluramine.</text>
+        </passage>
+        <passage>
+            <infon key="type">abstract</infon>
+            <offset>104</offset>
+            <text>Dexfenfluramine was approved in the United States for long-term use as an appetite suppressant until it was reported to be associated with valvular heart disease. The valvular changes (myofibroblast proliferation) are histopathologically indistinguishable from those observed in carcinoid disease or after long-term exposure to 5-hydroxytryptamine (5-HT)(2)-preferring ergot drugs (ergotamine, methysergide). 5-HT(2) receptor stimulation is known to cause fibroblast mitogenesis, which could contribute to this lesion. To elucidate the mechanism of "fen-phen"-associated valvular lesions, we examined the interaction of fenfluramine and its metabolite norfenfluramine with 5-HT(2) receptor subtypes and examined the expression of these receptors in human and porcine heart valves. Fenfluramine binds weakly to 5-HT(2A), 5-HT(2B), and 5-HT(2C) receptors. In contrast, norfenfluramine exhibited high affinity for 5-HT(2B) and 5-HT(2C) receptors and more moderate affinity for 5-HT(2A) receptors. In cells expressing recombinant 5-HT(2B) receptors, norfenfluramine potently stimulated the hydrolysis of inositol phosphates, increased intracellular Ca(2+), and activated the mitogen-activated protein kinase cascade, the latter of which has been linked to mitogenic actions of the 5-HT(2B) receptor. The level of 5-HT(2B) and 5-HT(2A) receptor transcripts in heart valves was at least 300-fold higher than the levels of 5-HT(2C) receptor transcript, which were barely detectable. We propose that preferential stimulation of valvular 5-HT(2B) receptors by norfenfluramine, ergot drugs, or 5-HT released from carcinoid tumors (with or without accompanying 5-HT(2A) receptor activation) may contribute to valvular fibroplasia in humans.</text>
+        </passage>
+    </document>
+</collection>
