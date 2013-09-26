@@ -1,4 +1,4 @@
-Copyright (c) 2013, OntoGene project, the University of Zurich (UZH).
+Copyright (c) 2013, the OntoGene project at the University of Zurich (UZH).
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -23,4 +23,5 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies, 
-either expressed or implied, of the OntoGene project or the University of Zurich (UZH).
+either expressed or implied, of the OntoGene project or the University of Zurich
+(UZH).
