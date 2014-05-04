@@ -17,9 +17,14 @@ BIOC_OUT = 'example_input_stemmed.xml'
 DTD_FILE = '..' + sep + 'BioC.dtd'
 
 def main():
+    # Use file defined by BIOC_IN as default if no other provided
+    bioc_in = BIOC_IN
+    if len(sys.argv) >= 2:
+        bioc_in = sys.argv[1]
+    
     # A BioCReader object is put in place to hold the example BioC XML
     # document
-    bioc_reader = BioCReader(BIOC_IN, dtd_valid_file=DTD_FILE)
+    bioc_reader = BioCReader(bioc_in, dtd_valid_file=DTD_FILE)
     
     # A BioCWRiter object is prepared to write out the annotated data
     bioc_writer = BioCWriter(BIOC_OUT)
