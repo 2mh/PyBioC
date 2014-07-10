@@ -111,7 +111,9 @@ class BioCReader:
                             annotations_parent_elem):
         for annotation_elem in annotation_elem_list:
             annotation = BioCAnnotation()
-            annotation.id = annotation_elem.attrib['id']
+            # Attribute id is just #IMPLIED, not #REQUIRED
+            if 'id' in annotation_elem.attrib:
+                annotation.id = annotation_elem.attrib['id']
             self._read_infons(annotation_elem.xpath('infon'),
                                 annotation)
                                 
@@ -129,7 +131,9 @@ class BioCReader:
     def _read_relations(self, relation_elem_list, relations_parent_elem):
         for relation_elem in relation_elem_list:
             relation = BioCRelation()
-            relation.id = relation_elem.attrib['id']
+            # Attribute id is just #IMPLIED, not #REQUIRED
+            if 'id' in relation_elem.attrib:
+                relation.id = relation_elem.attrib['id']
             self._read_infons(relation_elem.xpath('infon'), relation)
 
             for node_elem in relation_elem.xpath('node'):

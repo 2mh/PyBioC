@@ -123,6 +123,9 @@ class BioCWriter:
                 node_elem = relation_elem.xpath('node')[-1]
                 node_elem.attrib['refid'] = node.refid
                 node_elem.attrib['role'] = node.role
+            # id (just #IMPLIED)
+            if len(relation.id) > 0:
+                relation_elem.attrib['id'] = relation.id
         
     def _build_annotations(self, annotations_list, 
                             annotations_parent_elem):
@@ -142,8 +145,9 @@ class BioCWriter:
             annotation_elem.append(E('text'))
             text_elem = annotation_elem.xpath('text')[0]
             text_elem.text = annotation.text
-            # id
-            annotation_elem.attrib['id'] = annotation.id
+            # id (just #IMPLIED)
+            if len(annotation.id) > 0:
+                annotation_elem.attrib['id'] = annotation.id
 
     def _build_sentences(self, sentences_list, passage_parent_elem):
         for sentence in sentences_list:

@@ -1,3 +1,8 @@
+1.01
+----
+Fix invalid handling of id attributes for annotation and relation tags.
+(Thanks to Tilia Ellendorff <ellendorff@ifi.uzh.ch> for pointing it out.)
+
 1.00
 ----
 PyBioC library reaches usable state. The classes BioCReader and BioCWriter can 
