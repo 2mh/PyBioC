@@ -85,7 +85,11 @@ class BioCReader:
                 self._read_sentences(passage_elem.xpath('sentence'),
                                     passage)
             else:
-                passage.text = passage_elem.xpath('text')[0].text
+                # Is the (optional) text element available?
+		try:
+                    passage.text = passage_elem.xpath('text')[0].text
+                except:
+                    pass
                 self._read_annotations(passage_elem.xpath('annotation'),
                                     passage)
                                     
